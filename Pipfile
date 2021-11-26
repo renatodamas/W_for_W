@@ -10,6 +10,7 @@ python-decouple = "*"
 dj-database-url = "*"
 psycopg2-binary = "*"
 pillow = "*"
+collectfast = "*"
 
 [dev-packages]
 flake8 = "*"

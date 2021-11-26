@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7ee5ea814d1bd7730d980300c21bf66fa60f947422a124bd8ed0388d809d238a"
+            "sha256": "80f6e4242ca4a14dc49f195ed3aab13ceb987f7870626d756b4bd57122199b38"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -24,6 +24,14 @@
             "markers": "python_version >= '3.6'",
             "version": "==3.4.1"
         },
+        "collectfast": {
+            "hashes": [
+                "sha256:2f6abc8cab7ec5114a7a9a3660ab629ec142556957220aa82857dc9b4381490d",
+                "sha256:e716b2234ab50b5f1010b0d78c3fae8c6aebdb8b7c66ef5568503c33c1a5e19a"
+            ],
+            "index": "pypi",
+            "version": "==2.2.0"
+        },
         "dj-database-url": {
             "hashes": [
                 "sha256:4aeaeb1f573c74835b0686a2b46b85990571159ffc21aa57ecd4d1e1cb334163",
@@ -39,6 +47,14 @@
             ],
             "index": "pypi",
             "version": "==3.2.9"
+        },
+        "django-storages": {
+            "hashes": [
+                "sha256:204a99f218b747c46edbfeeb1310d357f83f90fa6a6024d8d0a3f422570cee84",
+                "sha256:a475edb2f0f04c4f7e548919a751ecd50117270833956ed5bd585c0575d2a5e7"
+            ],
+            "markers": "python_version >= '3.5'",
+            "version": "==1.12.3"
         },
         "gunicorn": {
             "hashes": [
@@ -159,6 +175,14 @@
             ],
             "markers": "python_version >= '3.5'",
             "version": "==0.4.2"
+        },
+        "typing-extensions": {
+            "hashes": [
+                "sha256:2cdf80e4e04866a9b3689a51869016d36db0814d84b8d8a568d22781d45d27ed",
+                "sha256:829704698b22e13ec9eaf959122315eabb370b0884400e9818334d8b677023d9"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==4.0.0"
         }
     },
     "develop": {

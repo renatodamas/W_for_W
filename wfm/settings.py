@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'collectfast',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'wfm.base'
@@ -124,11 +125,17 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
+# https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = os.path.join(BASE_DIR, 'static/')
-print(BASE_DIR)
-print(STATIC_URL)
+# Configuração de ambiente de desenvolvimento
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+
+COLLECTFAST_ENABLED = False
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
