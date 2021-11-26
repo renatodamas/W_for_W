@@ -1,5 +1,6 @@
 from flask import Flask, render_template
-import os, datetime
+import os
+import datetime
 import sqlite3
 from flask_sqlalchemy import SQLAlchemy
 
