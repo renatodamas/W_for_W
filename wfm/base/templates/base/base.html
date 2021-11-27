@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="pt_BR">
 <head>
     <!-- PAGE INFO -->
@@ -8,7 +9,7 @@
 
     <!-- Icones -->
     {#    <link rel="stylesheet" href="static/assets/fonts/style.css" />#}
-    <link href="{{ url_for('static', filename='icons/wfw-blue.png') }}" rel='icon'>
+    <link href="{% static 'icons/wfw-blue.png' %}" rel='icon'>
 
     <!-- Swiper -->
     <link
@@ -17,7 +18,7 @@
     />
 
     <!-- STYLES -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}"/>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
@@ -55,7 +56,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img
-                        src="{{ url_for('static', filename='icons/wfw.png') }}"
+                        src="{% static 'icons/wfw.png'%}"
                         alt="Simbolo da Campanha"
                         style="width:40px;height:40px;"
                 />
@@ -106,7 +107,7 @@
 <script src="https://unpkg.com/scrollreveal"></script>
 
 <!-- main.js -->
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{% static 'js/main.js'%}"></script>
 
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

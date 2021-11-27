@@ -127,12 +127,17 @@ USE_TZ = True
 
 # Configuração de ambiente de desenvolvimento
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '/mediafiles')
 
 COLLECTFAST_ENABLED = False
+
+print(BASE_DIR)
+print(STATIC_ROOT)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -140,7 +145,7 @@ COLLECTFAST_ENABLED = False
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Activate Django-Heroku.
-if config('HEROKU', cast=bool):
+if config('HEROKU', cast=bool, default=False):
     import django_heroku
 
     django_heroku.settings(locals())
