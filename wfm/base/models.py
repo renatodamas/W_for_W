@@ -56,15 +56,25 @@ class User(AbstractBaseUser, PermissionsMixin):
             'unique': _('Já existe um usuario com este username.')
         },
     )
-    first_name = models.CharField(_('Nome'), max_length=150, blank=True)
-    last_name = models.CharField(_('Sobrenomes'), max_length=150, blank=True)
-    email = models.EmailField(_('Email'), unique=True)
-    phone = models.CharField(_('Telefone'), max_length=50)
-    cpf_cnpj = models.CharField('CFP/CNPJ', max_length=50)
-    address = models.CharField(_('Endereço'), max_length=200)
-    cep = models.CharField('CEP', max_length=10)
-    picture = models.ImageField(blank=True, null=True)
-    user_type = models.CharField(max_length=20)
+    first_name = models.CharField(_('Names'), max_length=150)
+    last_name = models.CharField(_('Surnames'), max_length=150)
+    email = models.EmailField(_('Email'), unique=True, blank=True)
+    phone = models.CharField(_('Phone number'), max_length=50, blank=True)
+    cpf_cnpj = models.CharField('CFP/CNPJ', max_length=50, blank=True)
+    address = models.CharField(_('Address'), max_length=200, blank=True)
+    cep = models.CharField('CEP', max_length=10, blank=True)
+    picture = models.ImageField(_('Picture'), blank=True, null=True)
+
+    USER_TYPE_CHOICES = (
+        ('admin', 'Administrador BD'),
+        ('gestor_wfw', 'Gestor WFW'),
+        ('staff', 'Apoiador'),
+        ('giver', 'Doadoar'),
+        ('beneficiary', 'Beneficiario')
+    )
+
+    user_type = models.CharField(_('Tipo de Usuário'), max_length=20, blank=True,
+                                 choices=USER_TYPE_CHOICES)
 
     is_staff = models.BooleanField(
         _('staff status'),
