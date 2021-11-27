@@ -10,9 +10,8 @@ psycopg2-binary = "*"
 pillow = "*"
 collectfast = "*"
 django = "*"
-django-heroku = "*"
+
 dj-database-url = "*"
-jinja2 = "*"
 
 [dev-packages]
 flake8 = "*"
