@@ -6,11 +6,12 @@ name = "pypi"
 [packages]
 gunicorn = "*"
 python-decouple = "*"
-dj-database-url = "*"
 psycopg2-binary = "*"
 pillow = "*"
 collectfast = "*"
 django = "*"
+django-heroku = "*"
+dj-database-url = "*"
 
 [dev-packages]
 flake8 = "*"
