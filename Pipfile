@@ -10,8 +10,9 @@ psycopg2-binary = "*"
 pillow = "*"
 collectfast = "*"
 django = "*"
-
 dj-database-url = "*"
+django-ordered-model = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 flake8 = "*"

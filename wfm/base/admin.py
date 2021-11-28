@@ -14,11 +14,13 @@ from django.template.response import TemplateResponse
 from django.urls import path, reverse
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
+from ordered_model.admin import OrderedModelAdmin
 
-from wfm.base.models import User
+from wfm.base.models import User, Foto, Item, Evento, Depoimento
 
 csrf_protect_m = method_decorator(csrf_protect)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
@@ -26,33 +28,53 @@ sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    readonly_fields = ["foto_perfil"]
+
+    def foto_perfil(self, obj):
+        try:
+            html = '<img src="{url}" width="{width}" height={height} />'.format(
+                url=obj.picture.url,
+                width=obj.picture.width,
+                height=obj.picture.height,
+            )
+        except AttributeError:
+            html = ''
+        return mark_safe(html)
+
     add_form_template = 'admin/auth/user/add_form.html'
     change_user_password_template = None
     fieldsets = (
-        (_('Informações Gerais'), {'fields': ('username', 'picture', 'first_name', 'last_name', 'email', 'password')}),
-        (_('Outras Informações'), {'fields': ('cpf_cnpj', 'address', 'cep')}),
+        ('Informações Gerais', {'fields': ('username', 'picture', 'foto_perfil', 'first_name', 'last_name', 'email', 'password')}),
+        ('Outras Informações', {'fields': ('cpf_cnpj', 'phone', 'address', 'cep')}),
         (_('Permissions'), {
             'fields': ('user_type', 'is_active', 'is_staff', 'is_superuser',
-                       #'groups',
-                       #'user_permissions'
+                       'groups',
+                       'user_permissions'
                        ),
         }),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'first_name', 'last_name', 'email', 'password1', 'password2'),
+        ('Informações Gerais',
+         {'fields': ('username', 'picture', 'first_name', 'last_name', 'email', 'user_type', 'password')}
+         ),
+        (_('Outras Informações'), {'fields': ('cpf_cnpj', 'phone', 'address', 'cep')}),
+        (_('Permissions'), {
+            'fields': ('user_type', 'is_active', 'is_staff', 'is_superuser',
+                       'groups',
+                       'user_permissions'
+                       ),
         }),
     )
     form = UserChangeForm
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
-    list_display = ('username', 'first_name', 'last_name', 'email', 'is_staff')
+    list_display = ('username', 'first_name', 'last_name', 'email', 'user_type', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('username', 'first_name', 'last_name', 'email')
     ordering = ('first_name',)
     filter_horizontal = ('groups', 'user_permissions',)
+
 
     def get_fieldsets(self, request, obj=None):
         if not obj:
@@ -189,3 +211,28 @@ class UserAdmin(admin.ModelAdmin):
             request.POST = request.POST.copy()
             request.POST['_continue'] = 1
         return super().response_add(request, obj, post_url_continue)
+
+
+@admin.register(Foto)
+class FotoAdmin(OrderedModelAdmin):
+    list_display = ('descricao', 'evento', 'imagefile',)
+    list_filter = ('evento',)
+    ordering = ('evento',)
+    prepopulated_fields = {'slug': ('descricao',)}
+
+
+@admin.register(Item)
+class ItemAdmin(admin.ModelAdmin):
+    list_display = ('descricao', 'item_type')
+    ordering = ('descricao', 'item_type')
+
+
+@admin.register(Evento)
+class EventoAdmin(OrderedModelAdmin):
+    list_display = ('descricao', 'data', 'slug', 'status')
+    prepopulated_fields = {'slug': ('descricao',)}
+
+
+@admin.register(Depoimento)
+class DepoimentoAdmin(admin.ModelAdmin):
+    list_display = ('data', 'texto', 'usuario')
