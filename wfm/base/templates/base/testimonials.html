@@ -1,3 +1,8 @@
+ {% extends 'base/base.html' %}
+
+{% block title %} Depoimentos {% endblock %}
+
+{% block main %}
 <section class="section" id="testimonials">
     <div class="container">
         <header>
@@ -8,15 +13,17 @@
                 {% for depoimento in depoimentos %}
                 <div class="testimonial swiper-slide">
                     <blockquote>
-
-                        <p> <span>&ldquo;</span> {{ depoimento.texto}}
+                        <p>
+                            <span>&ldquo;</span>
+                            {{ depoimento.texto}}
+                            <span>&ldquo;</span>
                         </p>
                         <cite>
                             <img
-                                    src="{{ depoimento.usuario.picture.url }}"
-                                    alt="Foto de {{ depoimento.usuario.get_full_name }}"
+                                    src="static/assets/fotos/04.jpeg"
+                                    alt="Foto de Wanessa Souza"
                             />
-                            {{depoimento.usuario.get_full_name }}
+                            Wanessa Souza
                         </cite>
                     </blockquote>
                 </div>
@@ -28,3 +35,6 @@
         </div>
     </div>
 </section>
+
+
+{% endblock%}

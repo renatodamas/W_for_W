@@ -134,7 +134,8 @@ USE_TZ = True
 
 # Configuração de ambiente de desenvolvimento
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+STATIC_ROOT = BASE_DIR
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 
@@ -144,7 +145,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 COLLECTFAST_ENABLED = False
 
 print(BASE_DIR)
-print(STATIC_ROOT)
+print(f'{STATIC_ROOT= }')
+print(f'{STATICFILES_DIRS= }')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

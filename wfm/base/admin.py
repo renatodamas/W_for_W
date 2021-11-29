@@ -2,11 +2,11 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.contrib.admin.options import IS_POPUP_VAR
 from django.contrib.admin.utils import unquote
+from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import (
     AdminPasswordChangeForm, UserChangeForm, UserCreationForm,
 )
-from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.db import router, transaction
 from django.http import Http404, HttpResponseRedirect
@@ -20,7 +20,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from ordered_model.admin import OrderedModelAdmin
 
-from wfm.base.models import User, Foto, Item, Evento, Depoimento
+from wfm.base.forms import DoacaoChangeListForm
+from wfm.base.models import User, Foto, Item, Evento, Depoimento, Doacao, DoacaoItem
 
 csrf_protect_m = method_decorator(csrf_protect)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
@@ -28,14 +29,14 @@ sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    readonly_fields = ["foto_perfil"]
+    readonly_fields = ["foto_de_perfil"]
 
-    def foto_perfil(self, obj):
+    def foto_de_perfil(self, obj):
         try:
             html = '<img src="{url}" width="{width}" height={height} />'.format(
                 url=obj.picture.url,
-                width=obj.picture.width,
-                height=obj.picture.height,
+                width='100px',
+                height='auto',
             )
         except AttributeError:
             html = ''
@@ -44,37 +45,31 @@ class UserAdmin(admin.ModelAdmin):
     add_form_template = 'admin/auth/user/add_form.html'
     change_user_password_template = None
     fieldsets = (
-        ('Informações Gerais', {'fields': ('username', 'picture', 'foto_perfil', 'first_name', 'last_name', 'email', 'password')}),
-        ('Outras Informações', {'fields': ('cpf_cnpj', 'phone', 'address', 'cep')}),
+        (None, {'fields': ('first_name', 'last_name', 'email', 'password', 'user_type')}),
+
+        ('Outras Informações', {'fields': ("foto_de_perfil", 'picture', 'cpf_cnpj', 'phone', 'address', 'cep')}),
+
         (_('Permissions'), {
-            'fields': ('user_type', 'is_active', 'is_staff', 'is_superuser',
-                       'groups',
-                       'user_permissions'
-                       ),
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
-        ('Informações Gerais',
-         {'fields': ('username', 'picture', 'first_name', 'last_name', 'email', 'user_type', 'password')}
-         ),
-        (_('Outras Informações'), {'fields': ('cpf_cnpj', 'phone', 'address', 'cep')}),
-        (_('Permissions'), {
-            'fields': ('user_type', 'is_active', 'is_staff', 'is_superuser',
-                       'groups',
-                       'user_permissions'
-                       ),
+        (None, {
+            'classes': ('wide',),
+            'fields': ('first_name', 'last_name', 'email', 'password1', 'password2', 'user_type'),
         }),
+        ('Outras Informações', {'fields': ('picture', 'cpf_cnpj', 'phone', 'address', 'cep')}),
+
     )
     form = UserChangeForm
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
-    list_display = ('username', 'first_name', 'last_name', 'email', 'user_type', 'is_staff')
+    list_display = ('email', 'first_name', 'last_name', 'user_type', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
-    search_fields = ('username', 'first_name', 'last_name', 'email')
-    ordering = ('first_name',)
+    search_fields = ('first_name', 'email')
+    ordering = ('first_name', 'last_name')
     filter_horizontal = ('groups', 'user_permissions',)
-
 
     def get_fieldsets(self, request, obj=None):
         if not obj:
@@ -236,3 +231,37 @@ class EventoAdmin(OrderedModelAdmin):
 @admin.register(Depoimento)
 class DepoimentoAdmin(admin.ModelAdmin):
     list_display = ('data', 'texto', 'usuario')
+
+
+class DoacaoChangeList(ChangeList):
+
+    def __init__(self, request, model, list_display,
+                 list_display_links, list_filter, date_hierarchy,
+                 search_fields, list_select_related, list_per_page,
+                 list_max_show_all, list_editable, model_admin, sortable_by):
+
+        super(DoacaoChangeList, self).__init__(request, model,
+                                               list_display, list_display_links, list_filter,
+                                               date_hierarchy, search_fields, list_select_related,
+                                               list_per_page, list_max_show_all, list_editable,
+                                               model_admin, sortable_by
+                                               )
+
+        # these need to be defined here, and not in MovieAdmin
+        self.list_display = ['descricao', 'data', 'usuario', 'evento', 'itens']
+        self.list_display_links = ['descricao']
+        self.list_editable = ['itens']
+
+
+@admin.register(Doacao)
+class DoacaoAdmin(admin.ModelAdmin):
+    def get_changelist(self, request, **kwargs):
+        return DoacaoChangeList
+
+    def get_changelist_form(self, request, **kwargs):
+        return DoacaoChangeListForm
+
+
+@admin.register(DoacaoItem)
+class DoacaoItem(admin.ModelAdmin):
+    pass
